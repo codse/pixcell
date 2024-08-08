@@ -65,7 +65,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
             <Input
               type="color"
               value={previewColor}
-              className="w-full h-full opacity-0"
+              className="w-full h-full opacity-0 cursor-pointer"
               onChange={(event) => setPreviewColor(event.target.value)}
               onBlur={(event) =>
                 event.target.value && onColorChange(event.target.value)
