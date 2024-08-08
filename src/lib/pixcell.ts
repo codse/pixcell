@@ -57,6 +57,7 @@ export const previewImages = [
   '/7.png',
   '/8.png',
   '/9.png',
+  '/10.png',
 ] as const;
 
 export const getClipPath = (shapeType?: ShapeType) => {
