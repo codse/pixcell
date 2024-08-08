@@ -35,6 +35,7 @@ interface CanvasGridProps {
   ) => void;
   currentShape: ShapeType;
   currentColor: string;
+  image: string | ArrayBuffer | null;
 }
 
 interface ColorPickerProps {

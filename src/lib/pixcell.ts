@@ -37,7 +37,7 @@ export const modes = [
   },
 ] as const;
 
-export const gridSizes = [8, 16, 24, 32, 48, 64] as const;
+export const gridSizes = [16, 24, 32, 48, 64] as const;
 
 export const shapeTypes: ShapeType[] = [
   'square',

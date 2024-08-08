@@ -80,6 +80,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
   onPixelClick,
   currentShape,
   currentColor,
+  image,
 }) => {
   const gridStyle: React.CSSProperties = {
     display: 'grid',
@@ -119,8 +120,17 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       onMouseLeave={() => (isDragging.current = false)}
       style={gridStyle}
       draggable={false}
-      className="group relative  mx-auto p-0  rounded-none my-4 aspect-square w-full bg-foreground/10 border border-foreground/50 "
+      className="group relative mx-auto p-0 rounded-none my-4 aspect-square w-full bg-transparent border border-foreground/50 "
     >
+      <div className="absolute inset-0 w-full h-full bg-foreground/10" />
+      {!!image && (
+        <img
+          src={image as string}
+          alt="Uploaded"
+          draggable={false}
+          className="w-full h-full absolute opacity-50 z-10 object-cover pointer-events-none"
+        />
+      )}
       {Array.from({ length: width * height }).map((_, index) => {
         const x = index % width;
         const y = Math.floor(index / width);
@@ -134,15 +144,13 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
                 onPixelClick(x, y);
               }
             }}
-            className={
-              'cursor-pointer grid-cell relative bg-background focus:bg-foreground/10'
-            }
-            onClick={(event) => {
-              if (event.button === 1) {
-                event.preventDefault();
-                onPixelClick(x, y);
+            className={cn(
+              'cursor-pointer grid-cell relative bg-background/95',
+              {
+                'focus:bg-foreground/10': !pixel?.color,
               }
-            }}
+            )}
+            onClick={() => onPixelClick(x, y)}
           >
             {!!pixel?.color && (
               <span
@@ -156,8 +164,10 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
           </button>
         );
       })}
-      <div className="absolute top-1/2 h-px w-full -translate-y-0 group-hover:bg-foreground/30" />
-      <div className="absolute left-1/2 h-full w-px -translate-x-0 group-hover:bg-foreground/30" />
+
+      {/** Horizontal and vertical lines */}
+      <div className="absolute top-1/2 h-px w-full pointer-events-none -translate-y-0 group-hover:bg-foreground/30" />
+      <div className="absolute left-1/2 h-full w-px pointer-events-none -translate-x-0 group-hover:bg-foreground/30" />
     </CursorTracker>
   );
 };

@@ -23,6 +23,7 @@ import { useShortCut } from '@/hooks/use-shortcut';
 import { toast } from 'sonner';
 import { ToggleGroup } from '@/components/ui/toggle-group';
 import { GridDensityPicker } from '@/components/grid-density';
+import { ImageUpload } from '@/components/image-upload';
 
 const PixCell: React.FC = () => {
   const [gridSize, setGridSize] = useState<GridSize>({ width: 24, height: 24 });
@@ -30,6 +31,7 @@ const PixCell: React.FC = () => {
   const [pixels, setPixels] = useState<Pixel[]>([]);
   const [selectedShape, setSelectedShape] = useState<ShapeType>('square');
   const [symmetryMode, setSymmetryMode] = useState<SymmetryMode>('none');
+  const [image, setImage] = useState<string | ArrayBuffer | null>(null);
 
   const handlePixelClick = (
     x: number,
@@ -136,6 +138,9 @@ const PixCell: React.FC = () => {
           <ControlsContainer title="Grid density">
             <GridDensityPicker gridSize={gridSize} setGridSize={setGridSize} />
           </ControlsContainer>
+          <ControlsContainer title="Image">
+            <ImageUpload image={image} onImageUpload={setImage} />
+          </ControlsContainer>
           <ControlsContainer title="Shape">
             <ToggleGroup
               variant="outline"
@@ -174,6 +179,7 @@ const PixCell: React.FC = () => {
           onPixelClick={handlePixelClick}
           currentShape={selectedShape}
           currentColor={selectedColor}
+          image={image}
         />
 
         <div className="flex justify-between">
