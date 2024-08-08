@@ -5,6 +5,7 @@ const allowedPrefix = [
   ShortcutPrefix.Color,
   ShortcutPrefix.Shape,
   ShortcutPrefix.Symmetry,
+  ShortcutPrefix.GridSize,
 ];
 
 export const useShortCut = ({

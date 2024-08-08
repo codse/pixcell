@@ -3,6 +3,75 @@ import { CanvasGridProps } from '@/types';
 import { getClipPath } from '@/lib/pixcell';
 import CursorTracker from '@/components/animata/container/cursor-tracker';
 import { ShapeCursor } from '@/components/shape';
+import { cn } from '@/lib/utils';
+
+// import {
+//   ContextMenu,
+//   ContextMenuContent,
+//   ContextMenuItem,
+//   ContextMenuSeparator,
+//   ContextMenuShortcut,
+//   ContextMenuSub,
+//   ContextMenuSubContent,
+//   ContextMenuSubTrigger,
+//   ContextMenuTrigger,
+// } from './ui/context-menu';
+// import { cn } from '@/lib/utils';
+
+// /** Context menu is causing performance issues */
+// <ContextMenu key={index}>
+// <ContextMenuTrigger asChild>
+// </ContextMenuTrigger>
+// <ContextMenuContent>
+//   <ContextMenuSub>
+//     <ContextMenuSubTrigger>Color</ContextMenuSubTrigger>
+//     <ContextMenuSubContent className="w-48">
+//       {colors.map((color, index) => {
+//         return (
+//           <ContextMenuItem
+//             key={color}
+//             className={cn({
+//               'bg-muted': pixel?.color === color,
+//             })}
+//             onClick={() => onPixelClick(x, y, { color })}
+//           >
+//             <span
+//               className="w-4 h-4 rounded-full"
+//               style={{ backgroundColor: color }}
+//             />
+//             <ContextMenuShortcut>
+//               {ShortcutPrefix.Color.toUpperCase()}+{index + 1}
+//             </ContextMenuShortcut>
+//           </ContextMenuItem>
+//         );
+//       })}
+//     </ContextMenuSubContent>
+//   </ContextMenuSub>
+//   <ContextMenuSeparator />
+//   <ContextMenuSub>
+//     <ContextMenuSubTrigger>Shape</ContextMenuSubTrigger>
+//     <ContextMenuSubContent className="w-48">
+//       {shapeTypes.map((shape, index) => {
+//         return (
+//           <ContextMenuItem
+//             key={shape}
+//             onClick={() => onPixelClick(x, y, { shape })}
+//           >
+//             <ShapeCursor
+//               type={shape}
+//               className="p-1 w-9 h-9 me-auto"
+//               isSelected={pixel?.shape === shape}
+//             />
+//             <ContextMenuShortcut>
+//               {ShortcutPrefix.Shape.toUpperCase()}+{index + 1}
+//             </ContextMenuShortcut>
+//           </ContextMenuItem>
+//         );
+//       })}
+//     </ContextMenuSubContent>
+//   </ContextMenuSub>
+// </ContextMenuContent>
+// </ContextMenu>
 
 export const CanvasGrid: React.FC<CanvasGridProps> = ({
   width,
@@ -66,14 +135,25 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
               }
             }}
             className={
-              'cursor-pointer grid-cell relative bg-background focus:bg-foreground/30'
+              'cursor-pointer grid-cell relative bg-background focus:bg-foreground/10'
             }
-            style={{
-              backgroundColor: pixel?.color,
-              clipPath: getClipPath(pixel?.shape),
+            onClick={(event) => {
+              if (event.button === 1) {
+                event.preventDefault();
+                onPixelClick(x, y);
+              }
             }}
-            onClick={() => onPixelClick(x, y)}
-          />
+          >
+            {!!pixel?.color && (
+              <span
+                style={{
+                  backgroundColor: pixel?.color,
+                  clipPath: getClipPath(pixel?.shape),
+                }}
+                className={cn('absolute inset-0', {})}
+              />
+            )}
+          </button>
         );
       })}
       <div className="absolute top-1/2 h-px w-full -translate-y-0 group-hover:bg-foreground/30" />

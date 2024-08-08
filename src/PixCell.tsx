@@ -5,6 +5,8 @@ import {
   shapeTypes,
   colors,
   ShortcutPrefix,
+  gridSizes,
+  modes,
 } from '@/lib/pixcell';
 import { Symmetry } from '@/components/symmetry';
 import { Shape } from '@/components/shape';
@@ -19,8 +21,8 @@ import TypingText from '@/components/animata/text/typing-text';
 import BoldCopy from '@/components/animata/text/bold-copy';
 import { useShortCut } from '@/hooks/use-shortcut';
 import { toast } from 'sonner';
-import { gridSizes, modes } from '@/components/modes';
-import { ToggleGroup, ToggleGroupItem } from './components/ui/toggle-group';
+import { ToggleGroup } from '@/components/ui/toggle-group';
+import { GridDensityPicker } from '@/components/grid-density';
 
 const PixCell: React.FC = () => {
   const [gridSize, setGridSize] = useState<GridSize>({ width: 24, height: 24 });
@@ -29,7 +31,11 @@ const PixCell: React.FC = () => {
   const [selectedShape, setSelectedShape] = useState<ShapeType>('square');
   const [symmetryMode, setSymmetryMode] = useState<SymmetryMode>('none');
 
-  const handlePixelClick = (x: number, y: number): void => {
+  const handlePixelClick = (
+    x: number,
+    y: number,
+    updates?: Partial<Pick<Pixel, 'color' | 'shape'>>
+  ): void => {
     setPixels((prevPixels) => {
       const newPixels = [...prevPixels];
       const symmetryPoints = getSymmetryPoints(x, y, gridSize, symmetryMode);
@@ -45,6 +51,11 @@ const PixCell: React.FC = () => {
             color: selectedColor,
             shape: selectedShape,
           });
+        } else if (updates) {
+          newPixels[index] = {
+            ...newPixels[index],
+            ...updates,
+          };
         } else {
           newPixels.splice(index, 1);
         }
@@ -86,11 +97,18 @@ const PixCell: React.FC = () => {
       return;
     }
 
-    toast(`${prefix} + ${currentKey} is not a registered.`);
+    if (prefix === ShortcutPrefix.GridSize && position < gridSizes.length) {
+      setGridSize({
+        width: gridSizes[position],
+        height: gridSizes[position],
+      });
+      return;
+    }
+
+    toast(`${prefix} + ${currentKey} is not registered.`);
   };
 
   useShortCut({
-    timeout: 500,
     onShortCut: handleShortCut,
   });
 
@@ -109,31 +127,14 @@ const PixCell: React.FC = () => {
           text="A pixel art creator made for fun."
           grow={false}
           smooth
-          className="text-center text-balance mb-12 text-muted-foreground"
+          className="text-center text-balance mb-2 text-muted-foreground"
           repeat={false}
         />
       </header>
-      <div className="flex flex-col gap-4 duration-1000 animate-in fade-in-0 slide-in-from-bottom-10">
+      <div className="flex border-t border-t-muted-foreground/10 py-6 flex-col gap-4 duration-1000 animate-in fade-in-0 slide-in-from-bottom-10">
         <div className="flex gap-4 flex-col sm:flex-row justify-between">
           <ControlsContainer title="Grid density">
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              defaultValue={gridSize.width.toString()}
-              onValueChange={(value) => {
-                setGridSize({ height: +value, width: +value });
-              }}
-            >
-              {gridSizes.map((size) => (
-                <ToggleGroupItem
-                  className="aspect-square"
-                  value={size.toString()}
-                  key={size}
-                >
-                  {size}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
+            <GridDensityPicker gridSize={gridSize} setGridSize={setGridSize} />
           </ControlsContainer>
           <ControlsContainer title="Shape">
             <ToggleGroup
@@ -142,11 +143,12 @@ const PixCell: React.FC = () => {
               value={selectedShape}
               onValueChange={(v) => setSelectedShape(v as ShapeType)}
             >
-              {shapeTypes.map((shape) => (
+              {shapeTypes.map((shape, index) => (
                 <Shape
                   key={shape}
                   type={shape}
                   isSelected={shape === selectedShape}
+                  shortcutIndex={index + 1}
                 />
               ))}
             </ToggleGroup>

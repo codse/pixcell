@@ -1,4 +1,51 @@
 import { GridSize, Pixel, ShapeType, SymmetryMode } from '@/types';
+import { FlipHorizontal, Grid2X2, Square } from 'lucide-react';
+
+export const colors = [
+  '#000000',
+  '#dfdfdf',
+  '#22c55e',
+  '#d97706',
+  '#7c3aed',
+  '#a3e635',
+  '#ec4899',
+  '#60a5fa',
+] as const;
+
+export enum ShortcutPrefix {
+  Color = 'c',
+  Shape = 's',
+  Symmetry = 'm',
+  GridSize = 'g',
+}
+
+export const modes = [
+  {
+    title: 'None',
+    icon: Square,
+    mode: 'none',
+  },
+  {
+    title: 'Horizontal',
+    icon: FlipHorizontal,
+    mode: 'mirror',
+  },
+  {
+    title: 'Grid',
+    icon: Grid2X2,
+    mode: 'grid',
+  },
+] as const;
+
+export const gridSizes = [8, 16, 24, 32, 48, 64] as const;
+
+export const shapeTypes: ShapeType[] = [
+  'square',
+  'triangle',
+  'circle',
+  'diamond',
+  'hexagon',
+];
 
 export const getClipPath = (shapeType?: ShapeType) => {
   switch (shapeType) {
@@ -14,24 +61,6 @@ export const getClipPath = (shapeType?: ShapeType) => {
       return 'none';
   }
 };
-
-export const colors = [
-  '#000000',
-  '#dfdfdf',
-  '#22c55e',
-  '#d97706',
-  '#7c3aed',
-  '#a3e635',
-  '#ec4899',
-  '#60a5fa',
-  '#ffffff',
-] as const;
-
-export enum ShortcutPrefix {
-  Color = 'c',
-  Shape = 's',
-  Symmetry = 'm',
-}
 
 export function getSymmetryPoints(
   x: number,
@@ -58,14 +87,6 @@ export function getSymmetryPoints(
       return [{ x, y }];
   }
 }
-
-export const shapeTypes: ShapeType[] = [
-  'square',
-  'triangle',
-  'circle',
-  'diamond',
-  'hexagon',
-];
 
 export const exportPNG = (pixels: Pixel[], gridSize: GridSize) => {
   const canvas = document.createElement('canvas');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ShapeProps } from '@/types';
-import { getClipPath } from '@/lib/pixcell';
+import { getClipPath, ShortcutPrefix } from '@/lib/pixcell';
 import {
   Tooltip,
   TooltipContent,
@@ -9,19 +9,23 @@ import {
 } from '@/components/ui/tooltip';
 import { ToggleGroupItem } from './ui/toggle-group';
 import { Button } from './ui/button';
+import { ShortCutInfo } from './shortcut-info';
 
 const Container = ({
   children,
-  type,
-}: Pick<ShapeProps, 'type'> & {
+  tooltip,
+}: {
+  tooltip?: React.ReactNode;
   children: React.ReactNode;
 }) => {
+  if (!tooltip) {
+    return children;
+  }
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent>
-        <p className="capitalize">{type}</p>
-      </TooltipContent>
+      <TooltipContent>{tooltip}</TooltipContent>
     </Tooltip>
   );
 };
@@ -31,9 +35,20 @@ export const Shape: React.FC<ShapeProps> = ({
   isSelected,
   className,
   color,
+  shortcutIndex,
 }) => {
   return (
-    <Container type={type}>
+    <Container
+      tooltip={
+        <div className="capitalize">
+          <span className="inline-block mb-1">{type}</span>
+          <ShortCutInfo
+            item={String(shortcutIndex)}
+            prefix={ShortcutPrefix.Shape}
+          />
+        </div>
+      }
+    >
       <ToggleGroupItem
         className={cn('aspect-square p-1', className)}
         title={type}
@@ -64,7 +79,7 @@ export const ShapeCursor: React.FC<ShapeProps> = ({
   style,
 }) => {
   return (
-    <Container type={type}>
+    <Container>
       <Button
         className={className}
         title={type}

@@ -21,13 +21,18 @@ interface ShapeProps {
   className?: string;
   color?: string;
   style?: React.CSSProperties;
+  shortcutIndex?: number;
 }
 
 interface CanvasGridProps {
   width: number;
   height: number;
   pixels: Pixel[];
-  onPixelClick: (x: number, y: number) => void;
+  onPixelClick: (
+    x: number,
+    y: number,
+    updates?: { color?: string; shape?: ShapeType }
+  ) => void;
   currentShape: ShapeType;
   currentColor: string;
 }
