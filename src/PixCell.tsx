@@ -7,6 +7,7 @@ import {
   ShortcutPrefix,
   gridSizes,
   modes,
+  previewImages,
 } from '@/lib/pixcell';
 import { Symmetry } from '@/components/symmetry';
 import { Shape } from '@/components/shape';
@@ -24,6 +25,7 @@ import { toast } from 'sonner';
 import { ToggleGroup } from '@/components/ui/toggle-group';
 import { GridDensityPicker } from '@/components/grid-density';
 import { ImageUpload } from '@/components/image-upload';
+import Marquee from '@/components/animata/container/marquee';
 
 const PixCell: React.FC = () => {
   const [gridSize, setGridSize] = useState<GridSize>({ width: 24, height: 24 });
@@ -191,6 +193,16 @@ const PixCell: React.FC = () => {
           </Button>
           <ExportButton pixels={pixels} gridSize={gridSize} />
         </div>
+      </div>
+
+      <div className="relative overflow-hidden mt-12 mb-2">
+        <Marquee pauseOnHover>
+          {previewImages.map((src) => {
+            return (
+              <img key={src} src={src} alt="preview" className="size-16" />
+            );
+          })}
+        </Marquee>
       </div>
       <Toaster />
     </div>

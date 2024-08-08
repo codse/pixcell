@@ -19,11 +19,11 @@ export default function Footer() {
           delay: 1,
           duration: 0.5,
         }}
-        className="text-sm max-w-sm  mx-auto text-muted-foreground text-center"
+        className="text-sm flex flex-col gap-4 max-w-sm border-t my-4 py-4  mx-auto text-muted-foreground text-center"
       >
         <div className="gap-4 w-full relative flex justify-center items-center">
           <TextExplodeIMessage
-            text="Made with ❤️ by hari"
+            text="Made with AI [🤖] by hari"
             mode="hover"
             className="inline-flex text-sm text-muted-foreground"
           />
@@ -36,17 +36,36 @@ export default function Footer() {
             Follow me on 𝕏
           </a>
         </div>
+        <a
+          href="https://github.com/codse/pixcell"
+          target="_blank"
+          className="text-blue-400 font-bold mb-4 pb-4 border-b border-muted-foreground/10"
+        >
+          View source code
+        </a>
+        <div>
+          Thanks to everyone from Reddit who encouraged me to publish this.
+          Special thanks to{' '}
+          <a
+            href="https://instagram.com/psndshdraws"
+            className="text-blue-400 font-bold"
+            target="_blank"
+          >
+            Sandesh Pun
+          </a>{' '}
+          for providing early feedback.
+        </div>
         <div className="text-balance">
           We are also building{' '}
           <a
             href="https://animata.design"
             target="_blank"
-            className="text-emerald-500 font-bold"
+            className="text-blue-400 font-bold"
           >
             Animata
           </a>{' '}
-          - a free and open source animated/interactive component library for
-          React.{' '}
+          - a free and open source library of animated/interactive components
+          for React.{' '}
           <a
             href="https://github.com/codse/animata"
             target="_blank"
