@@ -134,7 +134,7 @@ const PixCell: React.FC = () => {
         />
       </header>
       <div className="flex border-t border-t-muted-foreground/10 py-6 flex-col gap-4 duration-1000 animate-in fade-in-0 slide-in-from-bottom-10">
-        <div className="flex gap-4 flex-col sm:flex-row justify-between">
+        <div className="flex gap-6 flex-wrap">
           <ControlsContainer title="Grid density">
             <GridDensityPicker gridSize={gridSize} setGridSize={setGridSize} />
           </ControlsContainer>
@@ -158,9 +158,7 @@ const PixCell: React.FC = () => {
               ))}
             </ToggleGroup>
           </ControlsContainer>
-        </div>
 
-        <div className="flex gap-4 flex-col sm:flex-row justify-between">
           <ControlsContainer title="Mirror">
             <Symmetry mode={symmetryMode} onModeChange={setSymmetryMode} />
           </ControlsContainer>
