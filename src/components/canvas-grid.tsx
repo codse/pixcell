@@ -100,6 +100,28 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     }
   }, [width, height]);
 
+  const onMove = (target: HTMLElement) => {
+    if (target && target.classList.contains('grid-cell')) {
+      const x = target.dataset.x;
+      const y = target.dataset.y;
+      const active = target.dataset.active === 'true';
+      if (x !== undefined && y !== undefined && isDragging.current && !active) {
+        onPixelClick(+x, +y);
+      }
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    onMove(target as HTMLElement);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    onMove(target);
+  };
+
   return (
     <CursorTracker
       tooltip={
@@ -118,6 +140,10 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       onMouseDown={() => (isDragging.current = true)}
       onMouseUp={() => (isDragging.current = false)}
       onMouseLeave={() => (isDragging.current = false)}
+      onTouchStart={() => (isDragging.current = true)}
+      onTouchEnd={() => (isDragging.current = false)}
+      onTouchMove={handleTouchMove}
+      onMouseMove={handleMouseMove}
       style={gridStyle}
       draggable={false}
       className="group relative mx-auto p-0 rounded-none my-4 aspect-square w-full bg-transparent border border-foreground/50 "
@@ -138,12 +164,10 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         return (
           <button
             key={index}
+            data-active={!!pixel}
+            data-x={x}
+            data-y={y}
             draggable={false}
-            onMouseMove={() => {
-              if (isDragging.current && !pixel) {
-                onPixelClick(x, y);
-              }
-            }}
             className={cn(
               'cursor-pointer grid-cell relative bg-background/95',
               {
