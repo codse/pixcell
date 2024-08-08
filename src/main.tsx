@@ -8,9 +8,9 @@ import { PostHogProvider } from 'posthog-js/react';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <PostHogProvider
-      apiKey={process.env.REACT_APP_PUBLIC_POSTHOG_KEY}
+      apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
       options={{
-        api_host: process.env.REACT_APP_PUBLIC_POSTHOG_HOST,
+        api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
         person_profiles: 'identified_only',
       }}
     >
