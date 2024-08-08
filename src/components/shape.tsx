@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ShapeProps } from '@/types';
-import { getClipPath } from '@/lib/pixie';
+import { getClipPath } from '@/lib/pixcell';
 import {
   Tooltip,
   TooltipContent,

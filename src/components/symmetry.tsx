@@ -1,27 +1,9 @@
 import React from 'react';
 import { SymmetryProps } from '@/types';
-import { FlipHorizontal, Grid2X2, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { cn } from '@/lib/utils';
-
-const modes = [
-  {
-    title: 'None',
-    icon: <Square />,
-    mode: 'none',
-  },
-  {
-    title: 'Horizontal',
-    icon: <FlipHorizontal />,
-    mode: 'mirror',
-  },
-  {
-    title: 'Grid',
-    icon: <Grid2X2 />,
-    mode: 'grid',
-  },
-] as const;
+import { modes } from './modes';
 
 export const Symmetry: React.FC<SymmetryProps> = ({ mode, onModeChange }) => {
   return (

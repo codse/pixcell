@@ -1,6 +1,6 @@
 import React from 'react';
 import { ExportButtonProps } from '@/types';
-import { exportPNG, exportSVG } from '@/lib/pixie';
+import { exportPNG, exportSVG } from '@/lib/pixcell';
 import { Download, ImageDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 

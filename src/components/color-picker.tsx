@@ -1,4 +1,4 @@
-import { colors } from '@/lib/pixie';
+import { colors } from '@/lib/pixcell';
 import { ColorPickerProps } from '@/types';
 import { Button } from '@/components/ui/button';
 import { TooltipContent, Tooltip, TooltipTrigger } from './ui/tooltip';

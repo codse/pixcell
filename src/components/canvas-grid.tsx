@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { CanvasGridProps } from '@/types';
-import { getClipPath } from '@/lib/pixie';
+import { getClipPath } from '@/lib/pixcell';
 import CursorTracker from '@/components/animata/container/cursor-tracker';
 import { Shape } from '@/components/shape';
 

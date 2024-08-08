@@ -32,6 +32,12 @@ export const colors = [
   '#ffffff',
 ] as const;
 
+export enum ShortcutPrefix {
+  Color = 'c',
+  Shape = 's',
+  Symmetry = 'm',
+}
+
 export function getSymmetryPoints(
   x: number,
   y: number,
