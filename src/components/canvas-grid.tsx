@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CanvasGridProps } from '@/types';
 import { getClipPath } from '@/lib/pixcell';
 import CursorTracker from '@/components/animata/container/cursor-tracker';
-import { Shape } from '@/components/shape';
+import { ShapeCursor } from '@/components/shape';
 
 export const CanvasGrid: React.FC<CanvasGridProps> = ({
   width,
@@ -21,16 +21,27 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     aspectRatio: `${width} / ${height}`,
   };
   const isDragging = useRef(false);
+  const [size, setSize] = useState(24);
+
+  useEffect(() => {
+    const cell = document.querySelector('.grid-cell');
+    if (cell) {
+      setSize(cell.getBoundingClientRect().width);
+    }
+  }, [width, height]);
 
   return (
     <CursorTracker
       tooltip={
-        <Shape
-          className="h-6 w-6 border-none bg-transparent"
+        <ShapeCursor
+          className="border-none bg-transparent p-px"
           type={currentShape}
           color={currentColor}
           isSelected
-          onClick={() => {}}
+          style={{
+            width: size,
+            height: size,
+          }}
         />
       }
       tooltipClassName="bg-transparent p-0 m-0 aspect-square"
@@ -55,7 +66,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
               }
             }}
             className={
-              'cursor-pointer relative bg-background focus:bg-foreground/30'
+              'cursor-pointer grid-cell relative bg-background focus:bg-foreground/30'
             }
             style={{
               backgroundColor: pixel?.color,

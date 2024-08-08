@@ -17,3 +17,5 @@ export const modes = [
     mode: 'grid',
   },
 ] as const;
+
+export const gridSizes = [8, 16, 24, 32, 48, 64] as const;

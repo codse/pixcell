@@ -1,52 +1,49 @@
 import { colors } from '@/lib/pixcell';
 import { ColorPickerProps } from '@/types';
-import { Button } from '@/components/ui/button';
 import { TooltipContent, Tooltip, TooltipTrigger } from './ui/tooltip';
 import { cn } from '@/lib/utils';
+import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({
   selectedColor,
   onColorChange,
 }) => {
   return (
-    <div className="flex gap-1 flex-wrap drop-shadow-sm">
+    <ToggleGroup
+      type="single"
+      value={selectedColor}
+      variant="outline"
+      onValueChange={onColorChange}
+      className="drop-shadow-sm"
+    >
       {colors.map((color, index) => {
         const isSelected = selectedColor === color;
         return (
           <Tooltip key={color}>
             <TooltipTrigger asChild>
-              <Button
-                onClick={() => onColorChange(color)}
+              <ToggleGroupItem
+                value={color}
                 variant="outline"
-                size="icon"
                 className={cn(
-                  'size-9 rounded-full aspect-square transition-all',
+                  'rounded-full p-1 aspect-square transition-all hover:p-0',
                   {
-                    border: isSelected,
+                    'p-0': isSelected,
                   }
                 )}
-                style={{
-                  borderColor: isSelected ? color : undefined,
-                }}
               >
                 <span
-                  className={cn(
-                    'size-7 rounded-full aspect-square hover:size-9 transition-all  ',
-                    {
-                      'size-9': isSelected,
-                    }
-                  )}
+                  className={cn('w-full h-full rounded-full')}
                   style={{ backgroundColor: color }}
                 />
-              </Button>
+              </ToggleGroupItem>
             </TooltipTrigger>
             <TooltipContent>
               Color #{index + 1}
-              <span className="text-xs block">Press CMD + ${index + 1}</span>
+              <span className="text-xs block">c + {index + 1}</span>
             </TooltipContent>
           </Tooltip>
         );
       })}
-    </div>
+    </ToggleGroup>
   );
 };

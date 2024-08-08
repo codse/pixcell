@@ -7,42 +7,84 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
+import { ToggleGroupItem } from './ui/toggle-group';
+import { Button } from './ui/button';
 
-export const Shape: React.FC<ShapeProps> = ({
+const Container = ({
+  children,
   type,
-  isSelected,
-  onClick,
-  className,
-  color,
+}: Pick<ShapeProps, 'type'> & {
+  children: React.ReactNode;
 }) => {
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          className={className}
-          onClick={onClick}
-          title={type}
-          size="icon"
-          variant="outline"
-        >
-          <span
-            className={cn(
-              'size-6 aspect-square inline-block bg-gray-500 hover:bg-blue-500/90 active:bg-blue-500/80 transition-colors duration-100 ease-in-out',
-              {
-                'bg-blue-500': isSelected && !color,
-              }
-            )}
-            style={{
-              backgroundColor: color,
-              clipPath: getClipPath(type),
-            }}
-          />
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent>
         <p className="capitalize">{type}</p>
       </TooltipContent>
     </Tooltip>
+  );
+};
+
+export const Shape: React.FC<ShapeProps> = ({
+  type,
+  isSelected,
+  className,
+  color,
+}) => {
+  return (
+    <Container type={type}>
+      <ToggleGroupItem
+        className={cn('aspect-square p-1', className)}
+        title={type}
+        value={type}
+      >
+        <span
+          className={cn(
+            'w-full h-full aspect-square inline-block bg-gray-500 hover:bg-blue-500/90 active:bg-blue-500/80 transition-colors duration-100 ease-in-out',
+            {
+              'bg-blue-500': isSelected && !color,
+            }
+          )}
+          style={{
+            backgroundColor: color,
+            clipPath: getClipPath(type),
+          }}
+        />
+      </ToggleGroupItem>
+    </Container>
+  );
+};
+
+export const ShapeCursor: React.FC<ShapeProps> = ({
+  type,
+  isSelected,
+  className,
+  color,
+  style,
+}) => {
+  return (
+    <Container type={type}>
+      <Button
+        className={className}
+        title={type}
+        size="icon"
+        variant="outline"
+        style={style}
+      >
+        <span
+          className={cn(
+            'w-full h-full aspect-square inline-block bg-gray-500 hover:bg-blue-500/90 active:bg-blue-500/80 transition-colors duration-100 ease-in-out',
+            {
+              'bg-blue-500': isSelected && !color,
+            }
+          )}
+          style={{
+            backgroundColor: color,
+            clipPath: getClipPath(type),
+          }}
+        />
+      </Button>
+    </Container>
   );
 };

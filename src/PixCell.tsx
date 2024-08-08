@@ -19,10 +19,11 @@ import TypingText from '@/components/animata/text/typing-text';
 import BoldCopy from '@/components/animata/text/bold-copy';
 import { useShortCut } from '@/hooks/use-shortcut';
 import { toast } from 'sonner';
-import { modes } from '@/components/modes';
+import { gridSizes, modes } from '@/components/modes';
+import { ToggleGroup, ToggleGroupItem } from './components/ui/toggle-group';
 
 const PixCell: React.FC = () => {
-  const [gridSize] = useState<GridSize>({ width: 24, height: 24 });
+  const [gridSize, setGridSize] = useState<GridSize>({ width: 24, height: 24 });
   const [selectedColor, setSelectedColor] = useState<string>('#000000');
   const [pixels, setPixels] = useState<Pixel[]>([]);
   const [selectedShape, setSelectedShape] = useState<ShapeType>('square');
@@ -114,28 +115,56 @@ const PixCell: React.FC = () => {
       </header>
       <div className="flex flex-col gap-4 duration-1000 animate-in fade-in-0 slide-in-from-bottom-10">
         <div className="flex gap-4 flex-col sm:flex-row justify-between">
-          <ControlsContainer title="Mirror">
-            <Symmetry mode={symmetryMode} onModeChange={setSymmetryMode} />
+          <ControlsContainer title="Grid density">
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              defaultValue={gridSize.width.toString()}
+              onValueChange={(value) => {
+                setGridSize({ height: +value, width: +value });
+              }}
+            >
+              {gridSizes.map((size) => (
+                <ToggleGroupItem
+                  className="aspect-square"
+                  value={size.toString()}
+                  key={size}
+                >
+                  {size}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
           </ControlsContainer>
           <ControlsContainer title="Shape">
-            <div className="flex flex-row gap-2">
+            <ToggleGroup
+              variant="outline"
+              type="single"
+              value={selectedShape}
+              onValueChange={(v) => setSelectedShape(v as ShapeType)}
+            >
               {shapeTypes.map((shape) => (
                 <Shape
                   key={shape}
                   type={shape}
-                  isSelected={selectedShape === shape}
-                  onClick={() => setSelectedShape(shape)}
+                  isSelected={shape === selectedShape}
                 />
               ))}
-            </div>
+            </ToggleGroup>
           </ControlsContainer>
         </div>
-        <ControlsContainer title="Color">
-          <ColorPicker
-            selectedColor={selectedColor}
-            onColorChange={setSelectedColor}
-          />
-        </ControlsContainer>
+
+        <div className="flex gap-4 flex-col sm:flex-row justify-between">
+          <ControlsContainer title="Mirror">
+            <Symmetry mode={symmetryMode} onModeChange={setSymmetryMode} />
+          </ControlsContainer>
+          <ControlsContainer title="Color">
+            <ColorPicker
+              selectedColor={selectedColor}
+              onColorChange={setSelectedColor}
+            />
+          </ControlsContainer>
+        </div>
+
         <CanvasGrid
           width={gridSize.width}
           height={gridSize.height}
@@ -144,6 +173,7 @@ const PixCell: React.FC = () => {
           currentShape={selectedShape}
           currentColor={selectedColor}
         />
+
         <div className="flex justify-between">
           <Button
             onClick={handleClear}

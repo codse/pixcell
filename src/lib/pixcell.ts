@@ -18,17 +18,12 @@ export const getClipPath = (shapeType?: ShapeType) => {
 export const colors = [
   '#000000',
   '#dfdfdf',
-  '#475569',
   '#22c55e',
-  '#c2410c',
   '#d97706',
   '#7c3aed',
   '#a3e635',
   '#ec4899',
   '#60a5fa',
-  '#f0abfc',
-  '#ca8a04',
-  '#8b5cf6',
   '#ffffff',
 ] as const;
 

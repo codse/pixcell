@@ -20,6 +20,7 @@ interface ShapeProps {
   onClick?: () => void;
   className?: string;
   color?: string;
+  style?: React.CSSProperties;
 }
 
 interface CanvasGridProps {
