@@ -45,6 +45,7 @@ export const shapeTypes: ShapeType[] = [
   'circle',
   'diamond',
   'hexagon',
+  'cylinder',
 ];
 
 export const previewImages = [
@@ -70,6 +71,8 @@ export const getClipPath = (shapeType?: ShapeType) => {
       return 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
     case 'hexagon':
       return 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)';
+    case 'cylinder':
+      return 'ellipse(50% 25% at 50% 50%)';
     default:
       return 'none';
   }
@@ -158,6 +161,27 @@ export const exportPNG = (pixels: Pixel[], gridSize: GridSize) => {
           ctx.lineTo(x, y + b);
         }
         break;
+      case 'cylinder':
+        ctx.moveTo(x + pixelSize / 4, y);
+        ctx.lineTo(x + (3 * pixelSize) / 4, y);
+        ctx.bezierCurveTo(
+          x + pixelSize,
+          y,
+          x + pixelSize,
+          y + pixelSize,
+          x + (3 * pixelSize) / 4,
+          y + pixelSize
+        );
+        ctx.lineTo(x + pixelSize / 4, y + pixelSize);
+        ctx.bezierCurveTo(
+          x,
+          y + pixelSize,
+          x,
+          y,
+          x + pixelSize / 4,
+          y
+        );
+        break;
     }
 
     ctx.closePath();
@@ -223,6 +247,15 @@ export const exportSVG = (pixels: Pixel[], gridSize: GridSize): void => {
             y + pixelSize
           } ${x + a},${y + pixelSize} ${x},${y + b}" fill="${pixel.color}"/>`;
         }
+        break;
+      case 'cylinder':
+        svgContent += `<path d="M${x + pixelSize / 4},${y} H${
+          x + (3 * pixelSize) / 4
+        } C${x + pixelSize},${y} ${x + pixelSize},${y + pixelSize} ${
+          x + (3 * pixelSize) / 4
+        },${y + pixelSize} H${x + pixelSize / 4} C${x},${y + pixelSize} ${
+          x
+        },${y} ${x + pixelSize / 4},${y}" fill="${pixel.color}"/>`;
         break;
     }
   });

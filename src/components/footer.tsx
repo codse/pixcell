@@ -23,7 +23,7 @@ export default function Footer() {
       >
         <div className="gap-4 w-full relative flex justify-center items-center">
           <TextExplodeIMessage
-            text="Made with AI [🤖] by hari"
+            text="Made with AI [🤖] by Hari"
             mode="hover"
             className="inline-flex text-sm text-muted-foreground"
           />

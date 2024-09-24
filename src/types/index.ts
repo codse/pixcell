@@ -1,4 +1,4 @@
-type ShapeType = 'square' | 'triangle' | 'circle' | 'diamond' | 'hexagon';
+type ShapeType = 'square' | 'triangle' | 'circle' | 'diamond' | 'hexagon' | 'cylinder';
 
 type SymmetryMode = 'none' | 'mirror' | 'grid';
 
