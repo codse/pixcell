@@ -225,15 +225,6 @@ export const exportSVG = (pixels: Pixel[], gridSize: GridSize): void => {
           } ${x + a},${y + pixelSize} ${x},${y + b}" fill="${pixel.color}"/>`;
         }
         break;
-      case 'cylinder':
-        svgContent += `<path d="M${x + pixelSize / 4},${y} H${
-          x + (3 * pixelSize) / 4
-        } C${x + pixelSize},${y} ${x + pixelSize},${y + pixelSize} ${
-          x + (3 * pixelSize) / 4
-        },${y + pixelSize} H${x + pixelSize / 4} C${x},${y + pixelSize} ${
-          x
-        },${y} ${x + pixelSize / 4},${y}" fill="${pixel.color}"/>`;
-        break;
     }
   });
 

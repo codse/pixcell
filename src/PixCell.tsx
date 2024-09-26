@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { GridSize, Pixel, ShapeType, SymmetryMode } from '@/types';
 import {
   getSymmetryPoints,
@@ -15,7 +15,7 @@ import { CanvasGrid } from '@/components/canvas-grid';
 import { ExportButton } from '@/components/export-button';
 import { ColorPicker } from '@/components/color-picker';
 import { Button } from '@/components/ui/button';
-import { Trash } from 'lucide-react';
+import { Trash, Undo, Redo } from 'lucide-react';
 import { Toaster } from '@/components/ui/sonner';
 import { ControlsContainer } from '@/components/controls-container';
 import TypingText from '@/components/animata/text/typing-text';
@@ -34,6 +34,9 @@ const PixCell: React.FC = () => {
   const [selectedShape, setSelectedShape] = useState<ShapeType>('square');
   const [symmetryMode, setSymmetryMode] = useState<SymmetryMode>('none');
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
+  const history = useRef<Pixel[][]>([]);
+  const redoHistory = useRef<Pixel[][]>([]);
+  const currentClickPixels = useRef<Pixel[]>([]);
 
   const handlePixelClick = (
     x: number,
@@ -49,18 +52,22 @@ const PixCell: React.FC = () => {
           (p) => p.x === point.x && p.y === point.y
         );
         if (index === -1) {
-          newPixels.push({
+          const newPixel = {
             x: point.x,
             y: point.y,
             color: selectedColor,
             shape: selectedShape,
-          });
+          };
+          newPixels.push(newPixel);
+          currentClickPixels.current.push(newPixel);
         } else if (updates) {
           newPixels[index] = {
             ...newPixels[index],
             ...updates,
           };
+          currentClickPixels.current.push(newPixels[index]);
         } else {
+          currentClickPixels.current.push(newPixels[index]);
           newPixels.splice(index, 1);
         }
       });
@@ -69,8 +76,48 @@ const PixCell: React.FC = () => {
     });
   };
 
+  const handleMouseUp = (): void => {
+    if (currentClickPixels.current.length > 0) {
+      history.current.push([...currentClickPixels.current]);
+      currentClickPixels.current = [];
+      redoHistory.current = []; // Clear redo history on new action
+    }
+  };
+
   const handleClear = (): void => {
+    history.current.push(pixels); // Save the current state to history
     setPixels([]);
+    redoHistory.current = []; // Clear redo history on new action
+  };
+
+  const handleUndo = (): void => {
+    setPixels((prevPixels) => {
+      if (history.current.length === 0) return prevPixels;
+      const lastClickPixels = history.current.pop();
+      if (lastClickPixels) {
+        redoHistory.current.push([...prevPixels]); // Save current state to redo history
+        const newPixels = prevPixels.filter(
+          (pixel) =>
+            !lastClickPixels.some(
+              (lastPixel) => lastPixel.x === pixel.x && lastPixel.y === pixel.y
+            )
+        );
+        return newPixels;
+      }
+      return prevPixels;
+    });
+  };
+
+  const handleRedo = (): void => {
+    setPixels((prevPixels) => {
+      if (redoHistory.current.length === 0) return prevPixels;
+      const nextClickPixels = redoHistory.current.pop();
+      if (nextClickPixels) {
+        history.current.push([...prevPixels]); // Save current state to undo history
+        return nextClickPixels;
+      }
+      return prevPixels;
+    });
   };
 
   const handleShortCut = ({
@@ -117,7 +164,10 @@ const PixCell: React.FC = () => {
   });
 
   return (
-    <div className="container flex max-w-xl gap-4 flex-col justify-center p-8">
+    <div
+      className="container flex max-w-xl gap-4 flex-col justify-center p-8"
+      onMouseUp={handleMouseUp}
+    >
       <header>
         <h1>
           <BoldCopy
@@ -191,6 +241,24 @@ const PixCell: React.FC = () => {
             <Trash className="size-4" />
             Clear
           </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleUndo}
+              variant="outline"
+              className="gap-2  "
+            >
+              <Undo className="size-4" />
+              Undo
+            </Button>
+            <Button
+              onClick={handleRedo}
+              variant="secondary"
+              className="gap-2  "
+            >
+              <Redo className="size-4" />
+              Redo
+            </Button>
+          </div>
           <ExportButton pixels={pixels} gridSize={gridSize} />
         </div>
       </div>
