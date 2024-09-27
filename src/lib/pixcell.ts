@@ -70,6 +70,7 @@ export const getClipPath = (shapeType?: ShapeType) => {
       return 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
     case 'hexagon':
       return 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)';
+    
     default:
       return 'none';
   }

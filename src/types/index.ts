@@ -1,6 +1,6 @@
-type ShapeType = 'square' | 'triangle' | 'circle' | 'diamond' | 'hexagon';
+type ShapeType = "square" | "triangle" | "circle" | "diamond" | "hexagon";
 
-type SymmetryMode = 'none' | 'mirror' | 'grid';
+type SymmetryMode = "none" | "mirror" | "grid";
 
 interface GridSize {
   width: number;
